@@ -1,62 +1,61 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace HapCss.UnitTests
 {
-    [TestClass]
     public class Html1
     {
         static HtmlAgilityPack.HtmlDocument doc = LoadHtml();
 
-        [TestMethod]
+        [Fact]
         public void IdSelectorMustReturnOnlyFirstElement()
         {
             var elements = doc.QuerySelectorAll("#myDiv");
 
-            Assert.IsTrue(elements.Count == 1);
-            Assert.IsTrue(elements[0].Id == "myDiv");
-            Assert.IsTrue(elements[0].Attributes["first"].Value == "1");
+            Assert.True(elements.Count == 1);
+            Assert.True(elements[0].Id == "myDiv");
+            Assert.True(elements[0].Attributes["first"].Value == "1");
         }
 
-        [TestMethod]
+        [Fact]
         public void GetElementsByAttribute()
         {
             var elements = doc.QuerySelectorAll("*[id=myDiv]");
 
-            Assert.IsTrue(elements.Distinct().Count() == 2 && elements.Count == 2);
+            Assert.True(elements.Distinct().Count() == 2 && elements.Count == 2);
             for (int i = 0; i < elements.Count; i++)
-                Assert.IsTrue(elements[i].Id == "myDiv");
+                Assert.True(elements[i].Id == "myDiv");
         }
 
-        [TestMethod]
+        [Fact]
         public void GetElementsByClassName1()
         {
             var elements1 = doc.QuerySelectorAll(".cls-a");
             var elements2 = doc.QuerySelectorAll(".clsb");
 
-            Assert.IsTrue(elements1.Count == 1);
+            Assert.True(elements1.Count == 1);
             for (int i = 0; i < elements1.Count; i++)
-                Assert.IsTrue(elements1[i] == elements2[i]);
+                Assert.True(elements1[i] == elements2[i]);
         }
 
-		[TestMethod]
+        [Fact]
         public void GetElementsByClassName_MultiClasses()
         {
             var elements = doc.QuerySelectorAll(".cls-a, .cls-b");
 
-            Assert.IsTrue(elements.Count == 2);
-            Assert.IsTrue(elements[0].Id == "spanA");
-            Assert.IsTrue(elements[1].Id == "spanB");
+            Assert.True(elements.Count == 2);
+            Assert.True(elements[0].Id == "spanA");
+            Assert.True(elements[1].Id == "spanB");
         }
 
-		[TestMethod]
+        [Fact]
         public void GetElementsByClassName_WithUnderscore()
         {
             var elements = doc.QuerySelectorAll(".underscore_class");
 
-            Assert.IsTrue(elements.Count == 1);
-            Assert.IsTrue(elements[0].Id == "spanB");
+            Assert.True(elements.Count == 1);
+            Assert.True(elements[0].Id == "spanB");
         }
 
 
