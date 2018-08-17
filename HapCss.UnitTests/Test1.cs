@@ -58,6 +58,23 @@ namespace HapCss.UnitTests
             Assert.True(elements[0].Id == "spanB");
         }
 
+        [Fact]
+        public void GetElementsByPseudoNot_WithUnderscore()
+        {
+            var elements = doc.QuerySelectorAll("div>*:not(span)");
+
+            Assert.Equal(1, elements.Count);
+            Assert.True(elements[0].InnerText == "P1");
+        }
+
+        [Fact]
+        public void GetElementsByPseudoNot2_WithUnderscore()
+        {
+            var elements = doc.QuerySelectorAll("*:not(table), *:not(table) *");
+
+            Assert.Equal(11, elements.Count);
+        }
+
 
 
         private static HtmlAgilityPack.HtmlDocument LoadHtml()

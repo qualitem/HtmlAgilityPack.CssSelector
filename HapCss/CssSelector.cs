@@ -35,12 +35,16 @@ namespace HapCss
             IEnumerable<HtmlNode> rt = this.FilterCore(nodes).Distinct();
 
             if (this.SubSelectors.Count == 0)
+            {
                 return rt;
+            }
 
             foreach (var selector in this.SubSelectors)
+            {
                 rt = selector.FilterCore(rt);
+            }
 
-            return rt;
+            return rt.Where(i => i.NodeType == HtmlNodeType.Element);
         }
 
         public virtual string GetSelectorParameter(string selector)
@@ -53,7 +57,9 @@ namespace HapCss
             var rt = new List<CssSelector>();
             var tokens = Tokenizer.GetTokens(cssSelector);
             foreach (var token in tokens)
+            {
                 rt.Add(ParseSelector(token));
+            }
 
             return rt;
         }
@@ -64,12 +70,20 @@ namespace HapCss
             CssSelector selector;
 
             if (char.IsLetter(token.Filter[0]))
+            {
                 selector = s_Selectors.First(i => i is Selectors.TagNameSelector);
+            }
             else
-                selector = s_Selectors.Where(s => s.Token.Length > 0).FirstOrDefault(s => token.Filter.StartsWith(s.Token));
+            {
+                selector = s_Selectors
+                    .Where(s => s.Token.Length > 0)
+                    .FirstOrDefault(s => token.Filter.StartsWith(s.Token));
+            }
 
             if (selector == null)
-                throw new InvalidOperationException("Token inválido: " + token.Filter);
+            {
+                throw new InvalidOperationException("Token invalid: " + token.Filter);
+            }
 
             selectorType = selector.GetType();
             var rt = (CssSelector)Activator.CreateInstance(selectorType);
